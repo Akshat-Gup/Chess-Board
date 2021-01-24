@@ -1,4 +1,3 @@
-
 const letters = ["a","b","c","d","e","f","g","h"];
 var table = document.createElement("table");
 for (var i = 1; i < 9; i++) {
@@ -11,9 +10,11 @@ for (var i = 1; i < 9; i++) {
             td.className = `black ${letters[j-1]} ${9-i}`;
 		}
 		if ((9-i)<3) {
-			td.innerHTML= `<div class="whitepiece"></div>`
-		} else if ((9-i)<3){
-			td.innerHTML= `<div class="blackpiece"></div>`
+			td.innerHTML= `<img src="./images/${letters[j-1]}${9-i}.png"/>`
+		} else if ((9-i)>6){
+			td.innerHTML= `<img src="./images/${letters[j-1]}${9-i}.png"/>`
+		} else {
+			td.innerHTML=`<img src="./images/blank.png"/>`
 		}
 
         tr.appendChild(td);
