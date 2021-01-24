@@ -1,0 +1,10 @@
+.white {
+	background-color: white;
+}
+.black {
+	background-color: brown;
+}
+table {
+	min-width: 100%;
+	min-height: 100%;
+}
