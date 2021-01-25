@@ -38,14 +38,29 @@ let actualTable = document.querySelector("table");
 //Stores the value of the initial square
 var squares = [];
 var capturedPieces = [];
+var whiteTurn = true;
 
 const initialSquare = event => {
 	console.log(event.target);
 	if (event.target.parentElement.innerHTML!="<img src=\"./images/blank.png\">"){
-		squares = `${event.target.parentElement.innerHTML}`;
+		//
+		if (whiteTurn) {
+			if ((String(event.target.parentElement.innerHTML)).includes('2') || (String(event.target.parentElement.innerHTML)).includes('1')) {
+				squares = `${event.target.parentElement.innerHTML}`;
+				whiteTurn = false;
+				event.target.parentElement.innerHTML = '<img src="./images/blank.png"/>';
+			}
+		} else {
+			if (String(event.target.parentElement.innerHTML).includes('7') || String(event.target.parentElement.innerHTML).includes('8')) {
+				squares = `${event.target.parentElement.innerHTML}`;
+				whiteTurn = true;
+				event.target.parentElement.innerHTML = '<img src="./images/blank.png"/>';
+			}
+		}
+		
 	}
 	console.log("firstSquare",squares);
-	event.target.parentElement.innerHTML = '<img src="./images/blank.png"/>';
+	
 	if (squares.length==0) {
 		actualTable.addEventListener("click", e => {initialSquare(e)}, {once : true});
 	} else {
