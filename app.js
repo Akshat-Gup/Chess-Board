@@ -22,3 +22,36 @@ for (var i = 1; i < 9; i++) {
     table.appendChild(tr);
 }
 document.body.appendChild(table);
+let actualTable = document.querySelector("table");
+var squares = [];
+
+const initialSquare = event => {
+	event.target.parentElement.style.background = 'lightblue';
+	console.log(event.target);
+	squares = `${event.target.parentElement.innerHTML}`;
+	console.log("firstSquare",squares);
+	event.target.parentElement.innerHTML = '<img src="./images/blank.png"/>';
+	if (squares.length==0) {
+		actualTable.addEventListener("click", e => {initialSquare(e)}, {once : true});
+	} else {
+		actualTable.addEventListener("click", e => { finalSquare(e)}, {once : true});
+	}
+}
+const finalSquare = event => {
+	console.log("secondSquare",squares);
+	event.target.parentElement.innerHTML = squares;
+	squares = [];
+	if (squares.length==0) {
+		actualTable.addEventListener("click", e => {initialSquare(e)}, {once : true});
+	} else {
+		actualTable.addEventListener("click", e => { finalSquare(e)}, {once : true});
+	}
+}
+if (squares.length==0) {
+	actualTable.addEventListener("click", e => {initialSquare(e)}, {once : true});
+} else {
+	actualTable.addEventListener("click", e => { finalSquare(e)}, {once : true});
+}
+
+
+
