@@ -22,11 +22,13 @@ for (var i = 1; i < 9; i++) {
     table.appendChild(tr);
 }
 document.body.appendChild(table);
+var captureDisplay = document.createElement("div");
+captureDisplay.classList.add("capturePiece");
+document.body.appendChild(captureDisplay);
 let actualTable = document.querySelector("table");
 var squares = [];
-
+var capturedPieces = [];
 const initialSquare = event => {
-	event.target.parentElement.style.background = 'lightblue';
 	console.log(event.target);
 	squares = `${event.target.parentElement.innerHTML}`;
 	console.log("firstSquare",squares);
@@ -39,6 +41,13 @@ const initialSquare = event => {
 }
 const finalSquare = event => {
 	console.log("secondSquare",squares);
+	if (event.target.parentElement.innerHTML!="<img src=\"./images/blank.png\">"){
+		capturedPieces.push(`${event.target.parentElement.innerHTML}`);
+		captureDisplay.innerHTML='<h5>Captured Pieces</h5><br>';
+		capturedPieces.forEach(piece => {
+			captureDisplay.innerHTML += piece
+		})
+	}
 	event.target.parentElement.innerHTML = squares;
 	squares = [];
 	if (squares.length==0) {
