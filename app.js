@@ -1,9 +1,13 @@
 const letters = ["a","b","c","d","e","f","g","h"];
+// Creating a table of squares for the chess pieces
 var table = document.createElement("table");
+// 9-i = the row number of the chessboard
+//letters[j] = the letter no. of the chessboard
 for (var i = 1; i < 9; i++) {
     var tr = document.createElement('tr');
     for (var j = 1; j < 9; j++) {
-        var td = document.createElement('td');
+		var td = document.createElement('td'); //creating eight letter squares in each chess row
+		// if the row number or column number are both either even or odd, color the square white else color it blue
         if (i%2 == j%2) {
             td.className = `white ${letters[j-1]} ${9-i}`;
         } else {
@@ -22,15 +26,24 @@ for (var i = 1; i < 9; i++) {
     table.appendChild(tr);
 }
 document.body.appendChild(table);
+
+//Capturing piece display
 var captureDisplay = document.createElement("div");
 captureDisplay.classList.add("capturePiece");
 document.body.appendChild(captureDisplay);
+
+//Querying the table
 let actualTable = document.querySelector("table");
+
+//Stores the value of the initial square
 var squares = [];
 var capturedPieces = [];
+
 const initialSquare = event => {
 	console.log(event.target);
-	squares = `${event.target.parentElement.innerHTML}`;
+	if (event.target.parentElement.innerHTML!="<img src=\"./images/blank.png\">"){
+		squares = `${event.target.parentElement.innerHTML}`;
+	}
 	console.log("firstSquare",squares);
 	event.target.parentElement.innerHTML = '<img src="./images/blank.png"/>';
 	if (squares.length==0) {
@@ -56,6 +69,8 @@ const finalSquare = event => {
 		actualTable.addEventListener("click", e => { finalSquare(e)}, {once : true});
 	}
 }
+// Initial code: if there is no square currently clicked on, then listen once for a click event and run code
+// else if there is already a square that is clicked
 if (squares.length==0) {
 	actualTable.addEventListener("click", e => {initialSquare(e)}, {once : true});
 } else {
