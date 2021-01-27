@@ -1,104 +1,73 @@
-const letters = ["a","b","c","d","e","f","g","h"];
-// Creating a table of squares for the chess pieces
-var table = document.createElement("table");
-// 9-i = the row number of the chessboard
-//letters[j] = the letter no. of the chessboard
+const boardLetters = ["a","b","c","d","e","f","g","h"];
+var table, captureDisplay, squares, capturedPieces, whiteTurn;
+squares = []; capturedPieces = []; whiteTurn = true;
+table = document.createElement("table");
+captureDisplay = document.createElement("div");
+
+// (9-i) = row & boardLetters(j) = column
 for (var i = 1; i < 9; i++) {
     var tr = document.createElement('tr');
     for (var j = 1; j < 9; j++) {
-		var td = document.createElement('td'); //creating eight letter squares in each chess row
-		// if the row number or column number are both either even or odd, color the square white else color it blue
+		var td = document.createElement('td'); //8 letters / row
+		// if (row number &&columnNumber = (both odd or both even)) {white square} else {blue square}
         if (i%2 == j%2) {
-            td.className = `white ${letters[j-1]} ${9-i}`;
+            td.className = `white ${boardLetters[j-1]} ${9-i}`;
         } else {
-            td.className = `black ${letters[j-1]} ${9-i}`;
+            td.className = `black ${boardLetters[j-1]} ${9-i}`;
 		}
 		if ((9-i)<3) {
-			td.innerHTML= `<img src="./images/${letters[j-1]}${9-i}.png"/>`
+			td.innerHTML= `<img src="./images/${boardLetters[j-1]}${9-i}.png"/>`
 		} else if ((9-i)>6){
-			td.innerHTML= `<img src="./images/${letters[j-1]}${9-i}.png"/>`
+			td.innerHTML= `<img src="./images/${boardLetters[j-1]}${9-i}.png"/>`
 		} else {
 			td.innerHTML=`<img src="./images/blank.png"/>`
 		}
-
         tr.appendChild(td);
     }
     table.appendChild(tr);
 }
+//Actually creating elements in the main body
 document.body.appendChild(table);
-
-//Capturing piece display
-var captureDisplay = document.createElement("div");
 captureDisplay.classList.add("capturePiece");
 document.body.appendChild(captureDisplay);
 
-//Querying the table
-let actualTable = document.querySelector("table");
 
-//Stores the value of the initial square
-var squares = [];
-//Stores the values of the captured pieces
-var capturedPieces = [];
-// Stores whether it's white's turn
-var whiteTurn = true;
-const initialSquare = event => { //Run this code if no piece has been clicked on before (no piece is in the middle of being moved)
-	console.log(event.target);
-	if (event.target.parentElement.innerHTML!="<img src=\"./images/blank.png\">" && (String(event.target.parentElement.innerHTML)).includes('img')){ //tell the code that a piece has been clicked only if it is not blank (is a piece)
-		//
-		if (whiteTurn) { //tell the code that a piece has been clicked and remove the image only if it is white's turn
-			if ((String(event.target.parentElement.innerHTML)).includes('2') || (String(event.target.parentElement.innerHTML)).includes('1')) {
-				squares = `${event.target.parentElement.innerHTML}`; //tell code that a piece is being moved
-				whiteTurn = false; // Make it black's turn
-				event.target.parentElement.innerHTML = '<img src="./images/blank.png"/>'; // remove the image of the square
-				if (squares.length==0) {
-					actualTable.addEventListener("click", e => { initialSquare(e)}, {once : true});
-				} else {
-					actualTable.addEventListener("click", e => { finalSquare(e)}, {once : true});
-				}
-				 //listen for more squares
-			} else {
-				actualTable.addEventListener("click", e => { initialSquare(e)}, {once : true});
-			}
-		} else { // Run this code if it is black's turn
-			if (String(event.target.parentElement.innerHTML).includes('7') || String(event.target.parentElement.innerHTML).includes('8')) {
-				squares = `${event.target.parentElement.innerHTML}`; //tell the code that a piece is being moved
-				whiteTurn = true; //Make it white's turn
-				event.target.parentElement.innerHTML = '<img src="./images/blank.png"/>';
-				if (squares.length==0) {
-					actualTable.addEventListener("click", e => { initialSquare(e)}, {once : true});
-				} else {
-					actualTable.addEventListener("click", e => { finalSquare(e)}, {once : true});
-				} //listen for the location of the moved square
-			} else {
-				actualTable.addEventListener("click", e => { initialSquare(e)}, {once : true});
-			}
+const recordInitialSquareAndListen = (event,firstFile, secondFile) => {
+	if ((String(event.target.parentElement.innerHTML)).includes(secondFile) || (String(event.target.parentElement.innerHTML)).includes(firstFile)) {
+		squares = `${event.target.parentElement.innerHTML}`; //tell code that a piece is being moved
+		whiteTurn = !whiteTurn; // Make it swap turn
+		event.target.parentElement.innerHTML = '<img src="./images/blank.png"/>'; // remove the image of the square
+		if (squares.length==0) {
+			table.addEventListener("click", e => { initialSquare(e)}, {once : true});
+		} else {
+			table.addEventListener("click", e => { finalSquare(e)}, {once : true});
 		}
-		
 	} else {
-		actualTable.addEventListener("click", e => { initialSquare(e)}, {once : true});
+		table.addEventListener("click", e => { initialSquare(e)}, {once : true});
 	}
+}
+
+const initialSquare = event => { //Run this code if no piece has been clicked on before (no piece is in the middle of being moved)
+	if (whiteTurn) { //tell the code that a piece has been clicked and remove the image only if it is white's turn
+		recordInitialSquareAndListen(event,'2','1');
+	} else { // Run this code if it is black's turn
+		recordInitialSquareAndListen(event,'7','8');
+	}	
 			
 }
 const finalSquare = event => {
-	console.log("secondSquare",squares);
 	if (event.target.parentElement.innerHTML!="<img src=\"./images/blank.png\">"){
 		capturedPieces.push(`${event.target.parentElement.innerHTML}`);
-		captureDisplay.innerHTML='<h5>Captured Pieces</h5><br>';
 		capturedPieces.forEach(piece => {
 			captureDisplay.innerHTML += piece
 		})
 	}
 	event.target.parentElement.innerHTML = squares;
 	squares = [];
-	
-
-actualTable.addEventListener("click", e => { initialSquare(e)}, {once : true});
-
-
+	table.addEventListener("click", e => {initialSquare(e)}, {once : true});
 }
 // Initial code: Listen for the initial square
-
-actualTable.addEventListener("click", e => {initialSquare(e)}, {once : true});
+table.addEventListener("click", e => {initialSquare(e)}, {once : true});
 
 
 
