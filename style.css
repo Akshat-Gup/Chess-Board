@@ -4,9 +4,16 @@
 .black {
 	background-color: rgba(104, 179, 179, 0.733);
 }
-
+body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-family: sans-serif;
+}
 table {
 	width: 100%;
+	max-width: 630px;
+	margin-top: 5px;
 }
 tr:after{
 	content: "";
@@ -46,6 +53,16 @@ h5 {
 	margin: none;
 	padding: none;
 }
+.capturePiece {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	height: 30px;
+}
 .capturePiece img {
-	max-width: 5%;
+	width: 30px;
+	height: 30px;
+}
+h1 {
+	margin-bottom: 0px;
 }
