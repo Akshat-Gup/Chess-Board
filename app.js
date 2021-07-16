@@ -15,20 +15,21 @@ let table = document.createElement('table');
 for (var i = 1; i <= 8; i++) {
 	var tableRow = document.createElement('tr');
 	for (var j = 1; j <= 8; j++) {
-		var tableColumn = document.createElement('td');
+		var columnElement = document.createElement('td');
 		let squareName = `${boardLetters[j - 1]} ${9 - i}`;
 
 		// A square is white if both row and column are even
 		if (i % 2 == j % 2) {
-			tableColumn.className = `white ` + squareName;
+			columnElement.className = `white ` + squareName;
 		} else {
-			tableColumn.className = `black ` + squareName;
+			columnElement.className = `black ` + squareName;
 		}
-		tableColumn.innerHTML =
+		// If the rows are in the rangee 7-8 or 1-2, fill the squares with pieces
+		columnElement.innerHTML =
 			i > 6 || i < 3
 				? `<img src="./images/${boardLetters[j - 1]}${9 - i}.png"/>`
 				: `<img src="./images/blank.png"/>`;
-		tableRow.appendChild(tableColumn);
+		tableRow.appendChild(columnElement);
 	}
 	table.appendChild(tableRow);
 }
@@ -36,7 +37,7 @@ for (var i = 1; i <= 8; i++) {
 document.body.appendChild(table);
 
 let blank = '<img src="./images/blank.png"/>';
-var squares = [];
+var squares = ''; // Squares needs to be a var or else the code will break
 let whiteRows = ['1','2'];
 let blackRows = ['7','8'];
 
@@ -48,7 +49,7 @@ const initialSquare = (event) => {
 	let isBlack = !whiteTurn && blackRows.some(validRow);
 
 	if (isWhite || isBlack) {
-		squares = `${parentInnerHtml}`; //tell code that a piece is being moved
+		squares = `${parentInnerHtml}`; // store the currenet piece in a global variable so that it can be accessed later
 		whiteTurn = !whiteTurn;
 		event.target.parentElement.innerHTML = blank; // remove the image of the square
 	}
