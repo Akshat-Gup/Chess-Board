@@ -66,3 +66,14 @@ h5 {
 h1 {
 	margin-bottom: 0px;
 }
+#piece-menu {
+	position: absolute;
+	top: 30px;
+	left: 90vw;
+	width: 30px;
+	height: 30px;
+}
+#piece-menu img {
+	width: 100%;
+	height: 100%;
+}

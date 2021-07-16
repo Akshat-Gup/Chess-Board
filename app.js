@@ -18,7 +18,7 @@ for (var i = 1; i <= 8; i++) {
 		var columnElement = document.createElement('td');
 		let squareName = `${boardLetters[j - 1]} ${9 - i}`;
 
-		// A square is white if both row and column are even
+		// A square is white if both row and column have the same modulus
 		if (i % 2 == j % 2) {
 			columnElement.className = `white ` + squareName;
 		} else {
@@ -41,6 +41,7 @@ var squares = ''; // Squares needs to be a var or else the code will break
 let whiteRows = ['1','2'];
 let blackRows = ['7','8'];
 
+let movedIndicator = document.querySelector("#piece-menu");
 const initialSquare = (event) => {
 	// Piece validation: Two cases:
 	let parentInnerHtml = String(event.target.parentElement.innerHTML);
@@ -50,13 +51,17 @@ const initialSquare = (event) => {
 
 	if (isWhite || isBlack) {
 		squares = `${parentInnerHtml}`; // store the currenet piece in a global variable so that it can be accessed later
+		movedIndicator.innerHTML = squares;
 		whiteTurn = !whiteTurn;
 		event.target.parentElement.innerHTML = blank; // remove the image of the square
 	}
 	table.addEventListener(
 		'click',
 		(e) => {
-			isWhite || isBlack ? finalSquare(e) : initialSquare(e);
+			if(String(e.target.tagName) == "IMG") { // preventing the user from clicking the table directly
+				isWhite || isBlack ? finalSquare(e) : initialSquare(e);
+			}
+			
 		},
 		{ once: true }
 	);
@@ -68,10 +73,14 @@ const finalSquare = (event) => {
 	}
 	event.target.parentElement.innerHTML = squares;
 	squares = [];
+	movedIndicator.innerHTML = '<img src="./images/blank.png">';
 	table.addEventListener(
 		'click',
 		(e) => {
-			initialSquare(e);
+			if(String(e.target.tagName) == "IMG") {
+				initialSquare(e); // // preventing the user from clicking the table directly
+			}
+			
 		},
 		{ once: true }
 	);
@@ -80,7 +89,10 @@ const finalSquare = (event) => {
 table.addEventListener(
 	'click',
 	(e) => {
-		initialSquare(e);
+		if(String(e.target.tagName) == "IMG") { // preventing users from clicking on the table directly
+			initialSquare(e);
+		}
+		
 	},
 	{ once: true }
 );
