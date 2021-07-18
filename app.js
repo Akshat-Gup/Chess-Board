@@ -10,7 +10,7 @@ document.body.appendChild(capturedPieces);
 // Adding the chessboard to the screen
 
 let table = document.createElement('table');
-
+let title = document.querySelector('h1');
 // (9-i) = row & boardLetters(j-1) = column
 for (var i = 1; i <= 8; i++) {
 	var tableRow = document.createElement('tr');
@@ -84,6 +84,7 @@ const finalSquare = (event) => {
 		},
 		{ once: true }
 	);
+	title.textContent = whiteTurn ? "White's turn" : "Black's turn";
 };
 // Initial code: Listen for the initial square
 table.addEventListener(
